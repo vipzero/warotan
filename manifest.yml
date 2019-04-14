@@ -1,0 +1,6 @@
+applications:
+  - name: vipitsbot
+    command: bin/hubot -a slack -n vipbot --require dist
+    path: .
+    instance: 1
+    memory: 256M # monthly free

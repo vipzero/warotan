@@ -10,6 +10,7 @@
   "scripts": {
     "clean": "rm -rf build && mkdir build",
     "build": "npm run clean && babel src -d dist",
+    "deploy": "npm build && cf push",
     "start": "bin/hubot --require dist"
   },
   "dependencies": {
