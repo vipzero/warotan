@@ -2,11 +2,8 @@ import { CronJob } from 'cron'
 import { getThreads } from '../module/scrape'
 
 export default robot => {
-  robot.hear(/a/i, res => {
-    const postedThreads = robot.brain.get('test') || []
-  })
-  const threadWatch = () => {
-    const threads = getThreads()
+  const threadWatch = async () => {
+    const threads = await getThreads()
     const postedThreads = robot.brain.get('postedThreads') || {}
     const newPostedThreads = {}
     const postThreads = []
@@ -25,5 +22,8 @@ export default robot => {
     }
     robot.brain.set('postedThreads', newPostedThreads)
   }
-  new CronJob('* * * * * *', threadWatch)
+  // new CronJob('* * * * * *', threadWatch)
+  new CronJob('00 * * * * *', () => {
+    robot.send({ room: 'vipbot-dev' }, '毎時')
+  })
 }

@@ -15,7 +15,7 @@ async function getThreads() {
   const threads = []
   $('#trad > a').map((i, elA) => {
     const a = $(elA)
-    const title = titleParse(a.text())
+    const { title, count } = titleParse(a.text())
     if (!title) {
       return
     }
@@ -30,5 +30,6 @@ function titleParse(text) {
   if (!m || !m[1]) {
     return null
   }
-  return m[1]
+
+  return { title: m[1], count: Number(m[2]) }
 }
