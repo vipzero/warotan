@@ -8,9 +8,9 @@
     "node": "10.x"
   },
   "scripts": {
-    "clean": "rm -rf build && mkdir build",
+    "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && babel src -d dist",
-    "deploy": "npm build && cf push",
+    "deploy": "npm run build && cf push",
     "start": "bin/hubot --require dist"
   },
   "dependencies": {
