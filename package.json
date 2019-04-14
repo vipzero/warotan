@@ -10,7 +10,7 @@
   "scripts": {
     "build": "babel src -d dist",
     "start": "bin/hubot --require dist",
-    "postinstall": "npm run build"
+    "postinstall": "node_modules/.bin/babel src -d dist"
   },
   "dependencies": {
     "hubot": "^3.3.1",
