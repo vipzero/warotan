@@ -21,7 +21,7 @@ export default robot => {
     })
     if (postThreads.length > 0) {
       const text = postThreads.map(th => `${th.title}→${th.url}`).join('\n')
-      robot.send('#watch_ero', text)
+      robot.send({ room: 'watch_ero' }, text)
     }
     robot.brain.set('postedThreads', newPostedThreads)
   }
