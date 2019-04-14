@@ -5,7 +5,7 @@
   "author": "vipb <hiroflighter@gmail.com>",
   "description": "vipits slack bot",
   "engines": {
-    "node": "0.10.x"
+    "node": "10.x"
   },
   "scripts": {
     "build": "babel src -d dist",
