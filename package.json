@@ -8,9 +8,9 @@
     "node": "10.x"
   },
   "scripts": {
-    "build": "babel src -d dist",
-    "start": "bin/hubot --require dist",
-    "postinstall": "node_modules/.bin/babel src -d dist"
+    "clean": "rm -rf build && mkdir build",
+    "build": "npm run clean && babel src -d dist",
+    "start": "bin/hubot --require dist"
   },
   "dependencies": {
     "hubot": "^3.3.1",
