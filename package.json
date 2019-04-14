@@ -10,7 +10,7 @@
   "scripts": {
     "build": "babel src -d dist",
     "start": "bin/hubot --require dist",
-    "postinstall": "yarn run build"
+    "postinstall": "npm run build"
   },
   "dependencies": {
     "hubot": "^3.3.1",
