@@ -1,1 +1,1 @@
-web: bin/hubot -a slack --require dist
+web: bin/hubot -a slack -n vipbot --require dist
