@@ -32,7 +32,3 @@ function titleParse(text) {
   }
   return m[1]
 }
-
-getThreads().then(threads => {
-  console.log({ threads })
-})
