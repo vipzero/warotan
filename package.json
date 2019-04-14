@@ -3,7 +3,15 @@
   "version": "0.0.0",
   "private": true,
   "author": "vipb <hiroflighter@gmail.com>",
-  "description": "",
+  "description": "vipits slack bot",
+  "engines": {
+    "node": "0.10.x"
+  },
+  "scripts": {
+    "build": "babel src -d dist",
+    "start": "bin/hubot --require dist",
+    "postinstall": "yarn run build"
+  },
   "dependencies": {
     "hubot": "^3.3.1",
     "hubot-diagnostics": "^1.0.0",
@@ -16,9 +24,12 @@
     "hubot-redis-brain": "^1.0.0",
     "hubot-rules": "^1.0.0",
     "hubot-scripts": "^2.17.2",
-    "hubot-shipit": "^0.2.1"
+    "hubot-shipit": "^0.2.1",
+    "hubot-slack": "^4.6.0"
   },
-  "engines": {
-    "node": "0.10.x"
+  "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-env": "^1.7.0"
   }
 }
