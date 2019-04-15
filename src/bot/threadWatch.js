@@ -4,28 +4,28 @@ import _ from 'lodash'
 
 const triggers = {
   ero: {
-    room: 'watch_ero',
+    room: 'mog_ero',
     name: 'エロ画像',
     exceeded: 10,
     regex: /エロ(画像|漫画|い)|エッチ/,
     getImage: true,
   },
   minecraft: {
-    room: 'watch_minecraft',
+    room: 'mog_minecraft',
     name: 'マイクラ',
     exceeded: 1,
     regex: /マインクラフト|マイクラ|minecraft/i,
     getImage: false,
   },
   splatoon: {
-    room: 'watch_splatoon',
+    room: 'mog_splatoon',
     name: 'スプラトゥーン',
     exceeded: 1,
     regex: /スプラ|splatoon/i,
     getImage: false,
   },
   programming: {
-    room: 'watch_programmer',
+    room: 'mog_programmer',
     name: 'プログラミング',
     exceeded: 1,
     regex: /プログラ/,
