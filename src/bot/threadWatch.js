@@ -2,7 +2,7 @@ import { CronJob } from 'cron'
 import { getThreads } from '../module/scrape'
 import _ from 'lodash'
 
-const triggers = {
+const baseTriggers = {
   ero: {
     room: 'mog_ero',
     name: 'エロ画像',
@@ -34,9 +34,33 @@ const triggers = {
 }
 
 export default robot => {
-  robot.hear(/もぐら list/i, res => {
+  robot.hear(/^もぐら( help)?$/i, res => {
+    res.send(`もぐらはスレッド監視するよ！
+Usage:
+  もぐら help: このヘルプを表示するよ
+  もぐら list: 監視リスト
+  もぐら add hoge: カスタム監視追加
+  もぐら remove hoge: カスタム監視削除
+`)
+  })
+  const getTriggers = () => {
+    const mogura = robot.brain.get('mogura') || {}
+    const keywrods = _.keys(mogura)
+    if (keywrods.length === 0) {
+      return baseTriggers
+    }
+    const custom = {
+      room: 'mog',
+      name: 'もぐら中',
+      exceeded: 1,
+      regex: new RegExp(keywrods.join('|')),
+      getImage: false,
+    }
+    return _.merge({}, baseTriggers, { custom })
+  }
+  robot.hear(/^もぐら list$/i, res => {
     const triggerTexts = _.map(
-      triggers,
+      getTriggers(),
       (trigger, triggerId) =>
         `${triggerId.padEnd(12)} => #${trigger.room.padEnd(17)} ${
           trigger.regex
@@ -45,12 +69,27 @@ export default robot => {
     res.send([`もぐら機能(スレッド監視)`, ...triggerTexts].join('\n'))
   })
 
+  robot.hear(/もぐら add (.+)/i, res => {
+    const keyword = res.match[1]
+    const mogura = robot.brain.get('mogura') || {}
+    mogura[keyword] = true
+    robot.brain.set('mogura', mogura)
+    res.send(`${keyword} を覚えたよ。#mog に流すよ。`)
+  })
+
+  robot.hear(/もぐら remove (.+)/i, res => {
+    const keyword = res.match[1]
+    const mogura = robot.brain.get('mogura') || {}
+    robot.brain.set('mogura', _.omit(mogura, [keyword]))
+    res.send(`${keyword} を忘れた。`)
+  })
+
   const threadWatch = async () => {
     const threads = await getThreads()
     const readedThreads = robot.brain.get('readedThreads') || {}
 
     const newPostedThreads = {}
-    _.forEach(triggers, (trigger, triggerId) => {
+    _.forEach(getTriggers(), (trigger, triggerId) => {
       // th.count でフィルタ
       const drafts = []
       threads.forEach(th => {
