@@ -9,7 +9,7 @@ const sjis2utf8 = new Iconv('SHIFT_JIS', 'UTF-8//TRANSLIT//IGNORE')
 axios.defaults.responseType = 'arraybuffer'
 axios.defaults.transformResponse = [data => sjis2utf8.convert(data).toString()]
 
-async function getThreads() {
+export async function getThreads() {
   const res = await axios.get(pageUrl)
   const $ = cheerio.load(res.data)
   const threads = []

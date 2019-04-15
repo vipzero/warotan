@@ -22,8 +22,6 @@ export default robot => {
     }
     robot.brain.set('postedThreads', newPostedThreads)
   }
-  // new CronJob('* * * * * *', threadWatch)
-  new CronJob('00 * * * * *', () => {
-    robot.send({ room: 'vipbot-dev' }, '毎時')
-  })
+  const cron = new CronJob('* * * * * *', threadWatch)
+  cron.start()
 }
