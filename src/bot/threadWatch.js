@@ -34,6 +34,17 @@ const triggers = {
 }
 
 export default robot => {
+  robot.hear(/もぐら list/i, res => {
+    const triggerTexts = _.map(
+      triggers,
+      (trigger, triggerId) =>
+        `${triggerId.padEnd(12)} => #${trigger.room.padEnd(17)} ${
+          trigger.regex
+        }`
+    )
+    res.send([`もぐら機能(スレッド監視)`, ...triggerTexts].join('\n'))
+  })
+
   const threadWatch = async () => {
     const threads = await getThreads()
     const readedThreads = robot.brain.get('readedThreads') || {}
