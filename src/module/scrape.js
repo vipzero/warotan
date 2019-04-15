@@ -2,7 +2,8 @@ import cheerio from 'cheerio'
 import { Iconv } from 'iconv'
 import axios from 'axios'
 const baseUrl = 'http://hebi.5ch.net/news4vip'
-const pageUrl = `${baseUrl}/subback.html`
+const makeThreadUrl = id => `${baseUrl}/test/read.cgi/${id}`
+const listPageUrl = `${baseUrl}/subback.html`
 
 const sjis2utf8 = new Iconv('SHIFT_JIS', 'UTF-8//TRANSLIT//IGNORE')
 
@@ -10,7 +11,7 @@ axios.defaults.responseType = 'arraybuffer'
 axios.defaults.transformResponse = [data => sjis2utf8.convert(data).toString()]
 
 export async function getThreads() {
-  const res = await axios.get(pageUrl)
+  const res = await axios.get(listPageUrl)
   const $ = cheerio.load(res.data)
   const threads = []
   $('#trad > a').map((i, elA) => {
@@ -19,8 +20,10 @@ export async function getThreads() {
     if (!title) {
       return
     }
-    const url = `${baseUrl}/${a.attr('href')}`
-    threads.push({ title, url })
+    const href = a.attr('href')
+    const id = href.split('/')[0]
+    const url = makeThreadUrl(id)
+    threads.push({ id, title, url })
   })
   return threads
 }
