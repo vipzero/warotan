@@ -18,6 +18,11 @@ const triggers = {
     name: 'スプラトゥーン',
     regex: /スプラ|splatoon/i,
   },
+  programming: {
+    room: 'watch_programmer',
+    name: 'プログラミング',
+    regex: /プログラ/,
+  },
 }
 
 export default robot => {
