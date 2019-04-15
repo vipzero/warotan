@@ -1,6 +1,13 @@
 import { CronJob } from 'cron'
 import { getThreads } from '../module/scrape'
 
+const triggers = {
+  ero: {
+    room: 'watch_ero',
+    regex: /エロ(画像|漫画|い)|エッチ/,
+  },
+}
+
 export default robot => {
   const threadWatch = async () => {
     const threads = await getThreads()
@@ -22,6 +29,6 @@ export default robot => {
     }
     robot.brain.set('postedThreads', newPostedThreads)
   }
-  const cron = new CronJob('* * * * * *', threadWatch)
+  const cron = new CronJob('00 * * * * *', threadWatch)
   cron.start()
 }
