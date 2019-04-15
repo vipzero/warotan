@@ -10,7 +10,7 @@
   "scripts": {
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && babel src -d dist",
-    "deploy": "npm run build && cf push",
+    "deploy": "git push heroku master",
     "start": "bin/hubot --require dist"
   },
   "dependencies": {
