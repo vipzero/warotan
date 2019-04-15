@@ -6,22 +6,30 @@ const triggers = {
   ero: {
     room: 'watch_ero',
     name: 'エロ画像',
+    exceeded: 10,
     regex: /エロ(画像|漫画|い)|エッチ/,
+    getImage: true,
   },
   minecraft: {
     room: 'watch_minecraft',
     name: 'マイクラ',
+    exceeded: 1,
     regex: /マインクラフト|マイクラ|minecraft/i,
+    getImage: false,
   },
   splatoon: {
     room: 'watch_splatoon',
     name: 'スプラトゥーン',
+    exceeded: 1,
     regex: /スプラ|splatoon/i,
+    getImage: false,
   },
   programming: {
     room: 'watch_programmer',
     name: 'プログラミング',
+    exceeded: 1,
     regex: /プログラ/,
+    getImage: false,
   },
 }
 
@@ -35,6 +43,9 @@ export default robot => {
       // th.count でフィルタ
       const drafts = []
       threads.forEach(th => {
+        if (th.count < trigger.exceeded) {
+          return
+        }
         // 既ポストスレッドを trigger 毎に保存する
         const id = `${triggerId}-${th.id}`
         if (th.title.match(trigger.regex)) {
