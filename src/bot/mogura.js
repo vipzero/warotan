@@ -7,7 +7,7 @@ const baseTriggers = {
     room: 'mog_ero',
     name: 'エロ画像',
     exceeded: 10,
-    regex: /エロ(画像|漫画|い)|エッチ/,
+    regex: /エ(ロ|ッチ).*画像/,
     getImage: true,
   },
   minecraft: {
@@ -34,7 +34,7 @@ const baseTriggers = {
 }
 
 export default robot => {
-  robot.hear(/^もぐら( help)?$/i, res => {
+  robot.hear(/^(mogura|もぐら)( help)?$/i, res => {
     res.send(`もぐらはスレッド監視するよ！
 Usage:
   もぐら help: このヘルプを表示するよ
@@ -58,18 +58,17 @@ Usage:
     }
     return _.merge({}, baseTriggers, { custom })
   }
-  robot.hear(/^もぐら list$/i, res => {
+  robot.hear(/^(mogura|もぐら) list$/i, res => {
     const triggerTexts = _.map(
       getTriggers(),
-      (trigger, triggerId) =>
-        `${triggerId.padEnd(12)} => #${trigger.room.padEnd(17)} ${
-          trigger.regex
-        }`
+      trigger =>
+        `#${trigger.room} ${trigger.regex}` +
+        (trigger.exceeded === 1 ? '' : `[${trigger.exceeded}レス以上]`)
     )
     res.send([`もぐら機能(スレッド監視)`, ...triggerTexts].join('\n'))
   })
 
-  robot.hear(/もぐら add (.+)/i, res => {
+  robot.hear(/(mogura|もぐら) add (.+)/i, res => {
     const keyword = res.match[1]
     const mogura = robot.brain.get('mogura') || {}
     mogura[keyword] = true
@@ -77,7 +76,7 @@ Usage:
     res.send(`${keyword} を覚えたよ。#mog に流すよ。`)
   })
 
-  robot.hear(/もぐら remove (.+)/i, res => {
+  robot.hear(/(mogura|もぐら) remove (.+)/i, res => {
     const keyword = res.match[1]
     const mogura = robot.brain.get('mogura') || {}
     robot.brain.set('mogura', _.omit(mogura, [keyword]))
@@ -107,10 +106,10 @@ Usage:
         }
       })
       if (drafts.length > 0) {
-        const textHeader = `${trigger.name} のスレを見つけたぞ！\n`
+        const textHeader = `【${trigger.name} スレ発見！】\n`
         const text = [
           textHeader,
-          ...drafts.map(th => `${th.title}→${th.url}`),
+          ...drafts.map(th => `${th.title}\n${th.url}`),
         ].join('\n')
         robot.send({ room: trigger.room }, text)
       }
