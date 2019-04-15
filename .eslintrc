@@ -9,6 +9,7 @@
     "sourceType": "module"
   },
   "rules": {
-    "no-undef": "warn"
+    "no-undef": "warn",
+    "no-unused-vars": "warn"
   }
 }

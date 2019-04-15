@@ -27,6 +27,7 @@ export default robot => {
 
     const newPostedThreads = {}
     _.forEach(triggers, (trigger, triggerId) => {
+      // th.count でフィルタ
       const drafts = []
       threads.forEach(th => {
         // 既ポストスレッドを trigger 毎に保存する
@@ -42,7 +43,7 @@ export default robot => {
       if (drafts.length > 0) {
         const textHeader = `${trigger.name} のスレを見つけたぞ！\n`
         const text = [
-          triggerId,
+          textHeader,
           ...drafts.map(th => `${th.title}→${th.url}`),
         ].join('\n')
         robot.send({ room: trigger.room }, text)

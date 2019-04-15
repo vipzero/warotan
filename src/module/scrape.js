@@ -1,9 +1,9 @@
 import cheerio from 'cheerio'
 import { Iconv } from 'iconv'
 import axios from 'axios'
-const baseUrl = 'http://hebi.5ch.net/news4vip'
-const makeThreadUrl = id => `${baseUrl}/test/read.cgi/${id}`
-const listPageUrl = `${baseUrl}/subback.html`
+const host = 'http://hebi.5ch.net'
+const makeThreadUrl = id => `${host}/test/read.cgi/news4vip/${id}`
+const listPageUrl = `${host}/news4vip/subback.html`
 
 const sjis2utf8 = new Iconv('SHIFT_JIS', 'UTF-8//TRANSLIT//IGNORE')
 
@@ -23,7 +23,7 @@ export async function getThreads() {
     const href = a.attr('href')
     const id = href.split('/')[0]
     const url = makeThreadUrl(id)
-    threads.push({ id, title, url })
+    threads.push({ id, title, url, count })
   })
   return threads
 }
