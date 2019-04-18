@@ -68,18 +68,18 @@ Usage:
     res.send([`もぐら機能(スレッド監視)`, ...triggerTexts].join('\n'))
   })
 
-  robot.hear(/(mogura|もぐら) add (.+)/i, res => {
-    const keyword = res.match[1]
-    const mogura = robot.brain.get('mogura') || {}
-    mogura[keyword] = true
-    robot.brain.set('mogura', mogura)
+  robot.hear(/^(mogura|もぐら) add (.+)$/i, res => {
+    const keyword = res.match[2]
+    robot.brain.set(
+      'mogura',
+      _.merge(robot.brain.get('mogura'), { [keyword]: true })
+    )
     res.send(`${keyword} を覚えたよ。#mog に流すよ。`)
   })
 
-  robot.hear(/(mogura|もぐら) remove (.+)/i, res => {
-    const keyword = res.match[1]
-    const mogura = robot.brain.get('mogura') || {}
-    robot.brain.set('mogura', _.omit(mogura, [keyword]))
+  robot.hear(/^(mogura|もぐら) remove (.+)$/i, res => {
+    const keyword = res.match[2]
+    robot.brain.set('mogura', _.omit(robot.brain.get('mogura'), [keyword]))
     res.send(`${keyword} を忘れた。`)
   })
 
