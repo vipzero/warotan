@@ -1,3 +1,5 @@
+![](doc/img/socialview.png)
+
 # vipits-bot
 
 vipits-bot is a chat bot built on the [Hubot][hubot] framework. It was
