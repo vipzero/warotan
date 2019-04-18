@@ -1,3 +1,10 @@
+// Description:
+//   VIP からきますた.
+//
+// Commands:
+//   ぬるぽ
+//   もぐら|mogura
+
 'use strict'
 
 const fs = require('fs')

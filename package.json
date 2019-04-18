@@ -11,9 +11,10 @@
     "clean": "rm -rf dist && mkdir dist",
     "build": "npm run clean && babel src -d dist",
     "deploy": "git push heroku master",
-    "start": "bin/hubot --require dist"
+    "start": "npm run build && bin/hubot --require dist"
   },
   "dependencies": {
+    "@slack/client": "^5.0.1",
     "axios": "^0.18.0",
     "cheerio": "^1.0.0-rc.3",
     "cron": "^1.7.0",
@@ -35,6 +36,7 @@
     "babel-preset-env": "^1.7.0",
     "eslint": "^5.16.0",
     "eslint-config-prettier": "^4.1.0",
-    "eslint-plugin-prettier": "^3.0.1"
+    "eslint-plugin-prettier": "^3.0.1",
+    "prettier": "^1.17.0"
   }
 }
