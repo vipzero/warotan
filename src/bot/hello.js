@@ -53,12 +53,26 @@ Usage:
   )
   robot.logger.debug('RTM loaded')
   rtm.on('member_joined_channel', async event => {
-    if (event.channel !== 'general' && event.channel !== channels.dev_warotan) {
+    await rtm.sendMessage(
+      `<@${event.user}> ${event.channel} にようこそ`,
+      event.channel
+    )
+    if (
+      event.channel !== 'general' &&
+      event.channel !== channels.devent.channelev_warotan
+    ) {
       return
     }
     const messages = robot.brain.get('helloMessages') || {}
     const message = _.sample(_.keys(messages)) || 'おはだお'
     await rtm.sendMessage(`<@${event.user}> ${message}`, event.channel)
+  })
+
+  rtm.on('channel_joined', async event => {
+    await rtm.sendMessage(
+      `ななななんですか...？やめてぇ...酷いことしないでぇ...`,
+      event.channel
+    )
   })
   rtm.start()
 }
