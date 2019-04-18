@@ -1,6 +1,10 @@
 /* global process:false */
 import { RTMClient } from '@slack/client'
-import { channels } from './constant'
+
+const dev_warotan = 'dev_warotan'
+const channels = {
+  dev_warotan,
+}
 
 export default robot => {
   const say = message => robot.send({ room: channels.dev_warotan }, message)
@@ -18,5 +22,5 @@ export default robot => {
     const res = await rtm.sendMessage(`@${event.user} ようこそ`, event.channel)
     console.log({ res })
   })
-  // rtm.start()
+  rtm.start()
 }
