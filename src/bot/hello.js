@@ -14,6 +14,7 @@ export default robot => {
   )
   robot.logger.debug('RTM loaded')
   rtm.on('member_joined_channel', async event => {
-    await rtm.sendMessage(`@${event.user} ようこそ`, event.channel)
+    const res = await rtm.sendMessage(`@${event.user} ようこそ`, event.channel)
+    console.log({ res })
   })
 }
