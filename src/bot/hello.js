@@ -18,5 +18,5 @@ export default robot => {
     const res = await rtm.sendMessage(`@${event.user} ようこそ`, event.channel)
     console.log({ res })
   })
-  rtm.start()
+  // rtm.start()
 }
