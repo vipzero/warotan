@@ -8,11 +8,12 @@ export default robot => {
     say('無課金ユーザなので寝ます(3:00〜9:00, heroku運用)')
   })
 
-  const rtm = new RTMClient(robot.adapter.options.token)
+  const rtm = new RTMClient(
+    (robot.adapter.options && robot.adapter.options.token) ||
+      process.env.HUBOT_SLACK_TOKEN
+  )
+  robot.logger.debug('RTM loaded')
   rtm.on('member_joined_channel', async event => {
-    const reply = await rtm.sendMessage(
-      `@${event.user} ようこそ`,
-      event.channel
-    )
+    await rtm.sendMessage(`@${event.user} ようこそ`, event.channel)
   })
 }
