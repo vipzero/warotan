@@ -1,8 +1,9 @@
 /* global process:false */
 import { RTMClient } from '@slack/client'
+import { channels } from './constant'
 
 export default robot => {
-  const say = message => robot.send({ room: 'vipbot_dev' }, message)
+  const say = message => robot.send({ room: channels.dev_warotan }, message)
   say('やっはろー！起動したよ')
   process.on('beforeExit', () => {
     say('無課金ユーザなので寝ます(3:00〜9:00, heroku運用)')
@@ -17,4 +18,5 @@ export default robot => {
     const res = await rtm.sendMessage(`@${event.user} ようこそ`, event.channel)
     console.log({ res })
   })
+  rtm.start()
 }
