@@ -1,6 +1,7 @@
 import { CronJob } from 'cron'
 import { getThreads } from '../module/scrape'
 import _ from 'lodash'
+import { analyzeSpeed } from '../module/analyzeSpeed'
 
 const baseTriggers = {
   ero: {
@@ -85,37 +86,52 @@ Usage:
 
   const threadWatch = async () => {
     const threads = await getThreads()
-    const readedThreads = robot.brain.get('readedThreads') || {}
-
-    const newPostedThreads = {}
-    _.forEach(getTriggers(), (trigger, triggerId) => {
-      // th.count でフィルタ
-      const drafts = []
-      threads.forEach(th => {
-        if (th.count < trigger.exceeded) {
-          return
-        }
-        // 既ポストスレッドを trigger 毎に保存する
-        const id = `${triggerId}-${th.id}`
-        if (th.title.match(trigger.regex)) {
-          newPostedThreads[id] = true
-          const alreadyPosted = readedThreads[id]
-          if (!alreadyPosted) {
-            drafts.push(th)
-          }
-        }
-      })
-      if (drafts.length > 0) {
-        const textHeader = `【${trigger.name} スレ発見！】\n`
-        const text = [
-          textHeader,
-          ...drafts.map(th => `${th.title}\n${th.url}`),
-        ].join('\n')
-        robot.send({ room: trigger.room }, text)
-      }
-    })
-    robot.brain.set('readedThreads', newPostedThreads)
+    mogura(robot, threads)
+    trend(robot, threads)
   }
   const cron = new CronJob('00 * * * * *', threadWatch)
   cron.start()
+}
+
+function mogura(robot, threads) {
+  const readedThreads = robot.brain.get('readedThreads') || {}
+
+  const newPostedThreads = {}
+  _.forEach(getTriggers(), (trigger, triggerId) => {
+    // th.count でフィルタ
+    const drafts = []
+    threads.forEach(th => {
+      if (th.count < trigger.exceeded) {
+        return
+      }
+      // 既ポストスレッドを trigger 毎に保存する
+      const id = `${triggerId}-${th.id}`
+      if (th.title.match(trigger.regex)) {
+        newPostedThreads[id] = true
+        const alreadyPosted = readedThreads[id]
+        if (!alreadyPosted) {
+          drafts.push(th)
+        }
+      }
+    })
+    if (drafts.length > 0) {
+      const textHeader = `【${trigger.name} スレ発見！】\n`
+      const text = [
+        textHeader,
+        ...drafts.map(th => `${th.title}\n${th.url}`),
+      ].join('\n')
+      robot.send({ room: trigger.room }, text)
+    }
+  })
+  robot.brain.set('readedThreads', newPostedThreads)
+}
+
+function trend(robot, threads) {
+  const oldSpeedThreads = robot.brain.get('speedThreads') || {
+    timestamp: 0,
+    captures: {},
+  }
+  const speedThreads = analyzeSpeed(threads, Date.now(), oldSpeedThreads)
+  robot.brain.set('speedThreads', speedThreads)
+  robot.send({ room: 'trend' }, JSON.stringify(speedThreads))
 }
