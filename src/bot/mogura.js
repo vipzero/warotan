@@ -35,6 +35,7 @@ const baseTriggers = {
 }
 
 export default robot => {
+  return // NOTE: disabled
   robot.hear(/^(mogura|もぐら)( help)?$/i, res => {
     res.send(`もぐらはスレッド監視するよ！
 Usage:
